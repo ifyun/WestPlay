@@ -72,6 +72,8 @@ export interface Strings {
     full: string
     onJob: string
     noAnswer: string
+    /** The game runs as administrator: WestPlay can't see its route. */
+    elevated: string
     unsupported: string
     failed: string
   }
@@ -550,6 +552,7 @@ export const STRINGS: Record<Language, Strings> = {
       full: 'The route has 10 stops, the most the game allows',
       onJob: 'On a job, the destination is the job’s',
       noAnswer: 'The game didn’t answer',
+      elevated: 'The game is running as administrator, so WestPlay can’t see its route. Start it normally',
       unsupported: 'This version of the game isn’t supported yet',
       failed: 'The game couldn’t route there',
     },
@@ -1035,6 +1038,7 @@ export const STRINGS: Record<Language, Strings> = {
       full: 'Rotada 10 durak var, oyunun izin verdiği en fazla',
       onJob: 'İşteyken varış noktası işin',
       noAnswer: 'Oyun yanıt vermedi',
+      elevated: 'Oyun yönetici olarak çalışıyor, WestPlay rotasını göremiyor. Oyunu normal başlatın',
       unsupported: 'Oyunun bu sürümü henüz desteklenmiyor',
       failed: 'Oyun oraya rota çizemedi',
     },

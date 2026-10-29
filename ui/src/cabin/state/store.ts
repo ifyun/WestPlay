@@ -268,8 +268,8 @@ export interface LiveState {
   routeStops: readonly number[]
   /** The game's weather (`null`: not known). */
   weather: GameWeather | null
-  /** Whether the game's window is in front (no game: as if it were). */
-  gameFocused: boolean
+  /** Whether the game's window shows, in front or not (no game: as if it did). */
+  gameShown: boolean
   /** The game's menu gone while it's still paused (the music comes back then, not 1.5 s later). */
   menuGone: boolean
   /** The keybind last pressed in the game, and how many so far (each press a new one). */
@@ -280,6 +280,8 @@ export interface LiveState {
   nearby: Nearby | null
   /** The music's spectrum as the host last said it (Settings › Equalizer's, `HostMessage` `spectrum`). */
   spectrum: readonly number[]
+  /** The host draws the screen's cursor (`cursor` message): the page draws none of its own then. */
+  cursorByHost: boolean
 }
 
 /** TruckersMP's players around the player, from its SDK: its game server's id, the player's own number on it,
@@ -306,12 +308,13 @@ export const useLive = create<LiveState>()(() => ({
   routeNext: 0,
   routeStops: [],
   weather: null,
-  gameFocused: true,
+  gameShown: true,
   menuGone: false,
   keybind: null,
   truckersmp: false,
   nearby: null,
   spectrum: [],
+  cursorByHost: false,
 }))
 
 /** Plain browser previews have no game to report the screen: `?layout=scania-2025` stands in for it. */
@@ -468,6 +471,9 @@ function receiveHostMessage(now: () => number): (message: HostMessage) => void {
       case 'spectrum':
         useLive.setState({ spectrum: message.bars })
         break
+      case 'cursor':
+        useLive.setState({ cursorByHost: message.host })
+        break
       case 'customize':
         useLooks.setState({ custom: { wallpapers: message.wallpapers, iconSets: message.iconSets } })
         break
@@ -477,8 +483,8 @@ function receiveHostMessage(now: () => number): (message: HostMessage) => void {
       case 'youtube':
         receiveState(message.state)
         break
-      case 'gameFocus':
-        useLive.setState({ gameFocused: message.focused })
+      case 'gameShown':
+        useLive.setState({ gameShown: message.shown })
         break
       case 'menuGone':
         useLive.setState({ menuGone: message.gone })
